@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.techmorshed.funchat.activity.AllUsersActivity;
 import com.techmorshed.funchat.activity.SettingsActivity;
 import com.techmorshed.funchat.activity.StartActivity;
 import com.techmorshed.funchat.adapter.SectionPagerAdapter;
@@ -102,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        if (item.getItemId()==R.id.main_all_btn){
+            startActivity(new Intent(getApplicationContext(), AllUsersActivity.class));
+
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
