@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.techmorshed.funchat.activity.SettingsActivity;
 import com.techmorshed.funchat.activity.StartActivity;
 import com.techmorshed.funchat.adapter.SectionPagerAdapter;
 
@@ -94,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
 
             FirebaseAuth.getInstance().signOut();
             sendToStart();
+        }
+        if (item.getItemId() == R.id.main_settings_btn){
+
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+
         }
 
 
