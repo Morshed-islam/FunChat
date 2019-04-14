@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         mLoginProgress = new ProgressDialog(this);
+
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("FunChatUsers");
 
 
@@ -61,15 +62,14 @@ public class LoginActivity extends AppCompatActivity {
         mLoginPassword = (TextInputLayout) findViewById(R.id.login_password);
         mLogin_btn = (Button) findViewById(R.id.login_btn);
 
-
         mLogin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 
                 String email = mLoginEmail.getEditText().getText().toString();
                 String password = mLoginPassword.getEditText().getText().toString();
 
-                if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
+                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
 
                     mLoginProgress.setTitle("Logging In");
                     mLoginProgress.setMessage("Please wait while we check your credentials.");
@@ -86,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+
     private void loginUser(String email, String password) {
 
 
@@ -93,15 +95,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-
-                if (task.isSuccessful()) {
+                if(task.isSuccessful()){
 
                     mLoginProgress.dismiss();
 
                     String current_user_id = mAuth.getCurrentUser().getUid();
                     String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                    mUserDatabase.child(current_user_id).child(deviceToken).setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mUserDatabase.child(current_user_id).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
 
@@ -110,17 +111,20 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(mainIntent);
                             finish();
 
+
                         }
                     });
 
-                }else{
+
+
+
+                } else {
 
                     mLoginProgress.hide();
 
                     String task_result = task.getException().getMessage().toString();
 
                     Toast.makeText(LoginActivity.this, "Error : " + task_result, Toast.LENGTH_LONG).show();
-
 
                 }
 
@@ -129,6 +133,4 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
-
 }
