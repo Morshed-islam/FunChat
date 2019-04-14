@@ -307,7 +307,42 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
+                // ------------ UNFRIENDS ---------
 
+                if(mCurrent_state.equals("friends")){
+
+                    Map unfriendMap = new HashMap();
+                    unfriendMap.put("Friends/" + mCurrent_user.getUid() + "/" + user_id, null);
+                    unfriendMap.put("Friends/" + user_id + "/" + mCurrent_user.getUid(), null);
+
+                    mRootRef.updateChildren(unfriendMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+
+                            if(databaseError == null){
+
+                                mCurrent_state = "not_friends";
+                                mProfileSendReqBtn.setText("Send Friend Request");
+
+                                mDeclineBtn.setVisibility(View.INVISIBLE);
+                                mDeclineBtn.setEnabled(false);
+
+                            } else {
+
+                                String error = databaseError.getMessage();
+
+                                Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                            mProfileSendReqBtn.setEnabled(true);
+
+                        }
+                    });
+
+                }
 
 
 
