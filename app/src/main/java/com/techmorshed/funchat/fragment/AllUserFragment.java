@@ -1,16 +1,21 @@
-package com.techmorshed.funchat.activity;
+package com.techmorshed.funchat.fragment;
+
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -18,11 +23,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.techmorshed.funchat.R;
+import com.techmorshed.funchat.activity.UsersProfileActivity;
 import com.techmorshed.funchat.model.Users;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AllUsersActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AllUserFragment extends Fragment {
 
 
     private Toolbar mToolbar;
@@ -31,40 +40,59 @@ public class AllUsersActivity extends AppCompatActivity {
 
     private DatabaseReference mUsersDatabase;
 
-    private LinearLayoutManager mLayoutManager;
+//    private LinearLayoutManager mLayoutManager;
     private ProgressDialog mProgress;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_users);
-
-
-        mToolbar = (Toolbar) findViewById(R.id.users_appBar);
-        setSupportActionBar(mToolbar);
-
-        getSupportActionBar().setTitle("All Users");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("FunChatUsers");
-
-        mLayoutManager = new LinearLayoutManager(this);
-
-        mUsersList = (RecyclerView) findViewById(R.id.users_list);
-        mUsersList.setHasFixedSize(true);
-        mUsersList.setLayoutManager(mLayoutManager);
-
-        mProgress = new ProgressDialog(AllUsersActivity.this);
-        mProgress.setMessage("Please Wait...........");
-        mProgress.show();
-
-       startTimer(10000);
-
+    public AllUserFragment() {
+        // Required empty public constructor
     }
 
 
     @Override
-    protected void onStart() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+
+        View view = inflater.inflate(R.layout.fragment_all_user, container, false);
+
+
+
+        mToolbar = (Toolbar) view.findViewById(R.id.users_appBar);
+//        setSupportActionBar(mToolbar);
+//
+//        getSupportActionBar().setTitle("All Users");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("FunChatUsers");
+
+//        mLayoutManager = new LinearLayoutManager(getContext());
+
+        mUsersList = (RecyclerView) view.findViewById(R.id.users_list_fragment);
+        mUsersList.setHasFixedSize(true);
+        mUsersList.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        mProgress = new ProgressDialog(getActivity());
+        mProgress.setMessage("Please Wait...........");
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.show();
+
+        startTimer(10000);
+
+
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public void onStart() {
         super.onStart();
 
         FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(
@@ -80,7 +108,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 usersViewHolder.setDisplayName(users.getName());
 //                usersViewHolder.setUserStatus(users.getStatus());
-                usersViewHolder.setUserImage(users.getThumb_image(), getApplicationContext());
+                usersViewHolder.setUserImage(users.getThumb_image(), getActivity());
 
                 final String user_id = getRef(position).getKey();
 
@@ -88,7 +116,7 @@ public class AllUsersActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent profileIntent = new Intent(AllUsersActivity.this, UsersProfileActivity.class);
+                        Intent profileIntent = new Intent(getContext(), UsersProfileActivity.class);
                         profileIntent.putExtra("user_id", user_id);
                         startActivity(profileIntent);
 
@@ -105,9 +133,10 @@ public class AllUsersActivity extends AppCompatActivity {
     }
 
 
+
     public static class UsersViewHolder extends RecyclerView.ViewHolder {
 
-        View mView;
+         View mView;
 
         public UsersViewHolder(View itemView) {
             super(itemView);
@@ -119,10 +148,18 @@ public class AllUsersActivity extends AppCompatActivity {
         public void setDisplayName(String name) {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
+
+            if (name.length()>12) {
+                name= name.substring(0,12)+"...";
+                userNameView.setText(name);
+//                result.setText(Html.fromHtml(text+"<font color='red'> <u>View More</u></font>"));
+
+            }
             userNameView.setText(name);
 
-        }
 
+        }
+//
 //        public void setUserStatus(String status) {
 //
 //            TextView userStatusView = (TextView) mView.findViewById(R.id.user_single_status);
@@ -144,8 +181,6 @@ public class AllUsersActivity extends AppCompatActivity {
 
 
 
-
-
     //TODO Timer countDown work
     private void startTimer(long time) {
         CountDownTimer counter = new CountDownTimer(2000, 1000) {
@@ -163,6 +198,10 @@ public class AllUsersActivity extends AppCompatActivity {
             }
         }.start();
     }
+
+
+
+
 
 
 }

@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class UsersProfileActivity extends AppCompatActivity {
 
     private ImageView mProfileImage;
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
@@ -98,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
                 mProfileName.setText(display_name);
                 mProfileStatus.setText(status);
 
-                Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mProfileImage);
+                Picasso.with(UsersProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mProfileImage);
 
 
                 //-----------------------------FRIEND LIST / REQUEST FEATURES-----------------------------------
@@ -205,7 +205,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
-//                                        Toast.makeText(ProfileActivity.this, " Request Sent!", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(UsersProfileActivity.this, " Request Sent!", Toast.LENGTH_SHORT).show();
 
                                         mProfileSendReqBtn.setEnabled(true);
                                         mCurrent_state = "req_sent";
@@ -218,7 +218,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                             } else {
 
-                                Toast.makeText(ProfileActivity.this, "Error Sending Request!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UsersProfileActivity.this, "Error Sending Request!", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -293,7 +293,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 String error = databaseError.getMessage();
 
-                                Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UsersProfileActivity.this, error, Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -332,7 +332,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 String error = databaseError.getMessage();
 
-                                Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UsersProfileActivity.this, error, Toast.LENGTH_SHORT).show();
 
 
                             }

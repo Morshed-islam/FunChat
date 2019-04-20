@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.ProfileActivity"/>
+        <activity android:name=".activity.UsersProfileActivity"/>
         <activity android:name=".activity.AllUsersActivity" />
         <activity android:name=".activity.StatusActivity" />
         <activity android:name=".activity.SettingsActivity" />

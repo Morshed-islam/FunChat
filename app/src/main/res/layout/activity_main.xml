@@ -1,36 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+
+    <include
+        android:id="@+id/main_page_toolbar"
+        layout="@layout/app_bar_layout" />
+
+
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:id="@+id/appBarLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="673dp"
+        android:text="Home"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_page_toolbar" />
 
-        <include
-            android:id="@+id/main_page_toolbar"
-            layout="@layout/app_bar_layout" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/main_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        </android.support.design.widget.TabLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/main_tabPager"
-        android:layout_width="match_parent"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appBarLayout">
+        android:background="@color/colorPrimary"
+        app:itemIconTint="#FFF"
+        app:itemTextColor="#fff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
 
-    </android.support.v4.view.ViewPager>
+</android.support.constraint.ConstraintLayout>
 
 
-</RelativeLayout>
+    <!--<?xml version="1.0" encoding="utf-8"?>--><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context=".MainActivity">-->
+
+    <!--<android.support.design.widget.AppBarLayout--><!--android:id="@+id/appBarLayout"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">-->
+
+    <!--<include--><!--android:id="@+id/main_page_toolbar"--><!--layout="@layout/app_bar_layout" />-->
+
+    <!--&lt;!&ndash;<android.support.design.widget.TabLayout&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/main_tabs"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;--><!--&lt;!&ndash;android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">&ndash;&gt;--><!--&lt;!&ndash;</android.support.design.widget.TabLayout>&ndash;&gt;-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <!--&lt;!&ndash;<android.support.v4.view.ViewPager&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/main_tabPager"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;--><!--&lt;!&ndash;android:layout_below="@+id/appBarLayout">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;</android.support.v4.view.ViewPager>&ndash;&gt;-->
+
+
+    <!--<FrameLayout--><!--android:id="@+id/fragment_container"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:layout_marginBottom="56dp"--><!--android:text="HOme"--><!--app:layout_constraintLeft_toLeftOf="parent"--><!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<android.support.design.widget.BottomNavigationView--><!--android:id="@+id/navigation"--><!--android:layout_width="0dp"--><!--android:layout_height="wrap_content"--><!--android:background="@color/colorPrimary"--><!--app:itemIconTint="@color/colorPrimaryDark"--><!--app:itemTextColor="@color/colorAccent"--><!--app:layout_constraintBottom_toBottomOf="parent"--><!--app:layout_constraintLeft_toLeftOf="parent"--><!--app:layout_constraintRight_toRightOf="parent"--><!--app:menu="@menu/navigation" />-->
+
+    <!--</RelativeLayout>-->
+
+

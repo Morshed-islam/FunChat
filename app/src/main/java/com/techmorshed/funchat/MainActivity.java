@@ -1,8 +1,9 @@
 package com.techmorshed.funchat;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +15,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.techmorshed.funchat.activity.AllUsersActivity;
 import com.techmorshed.funchat.activity.SettingsActivity;
 import com.techmorshed.funchat.activity.StartActivity;
-import com.techmorshed.funchat.adapter.SectionPagerAdapter;
+import com.techmorshed.funchat.fragment.AllUserFragment;
+import com.techmorshed.funchat.fragment.ChatsFragment;
+import com.techmorshed.funchat.fragment.FriendsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
 
-    private SectionPagerAdapter mSectionsPagerAdapter;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
+//    private SectionPagerAdapter mSectionsPagerAdapter;
+//    private TabLayout mTabLayout;
+//    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,33 +36,43 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Fun Chat");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mAuth = FirebaseAuth.getInstance();
 
 
+        //loading the default fragment
+        loadFragment(new AllUserFragment());
 
-
+        //getting bottom navigation view and attaching the listener
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
 
         //Tabs
-        mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
-        mSectionsPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+//        mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
+//        mSectionsPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+//
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
-        mTabLayout.setupWithViewPager(mViewPager);
-
+//        mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+//        mTabLayout.setupWithViewPager(mViewPager);
 
 
     }
 
 
-
-
-
+    private boolean loadFragment(Fragment fragment) {
+        //switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 
 
     @Override
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser == null){
+        if (currentUser == null) {
 
             sendToStart();
 
@@ -84,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -92,22 +105,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.main_logout_btn){
+        if (item.getItemId() == R.id.main_logout_btn) {
 
             FirebaseAuth.getInstance().signOut();
             sendToStart();
         }
-        if (item.getItemId() == R.id.main_settings_btn){
+        if (item.getItemId() == R.id.main_settings_btn) {
 
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 
         }
 
-        if (item.getItemId()==R.id.main_all_btn){
-            startActivity(new Intent(getApplicationContext(), AllUsersActivity.class));
-
-
-        }
+//        if (item.getItemId() == R.id.main_all_btn) {
+//            startActivity(new Intent(getApplicationContext(), AllUsersActivity.class));
+//
+//
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -118,5 +131,31 @@ public class MainActivity extends AppCompatActivity {
         startActivity(startIntent);
         finish();
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        Fragment fragment = null;
+
+        switch (menuItem.getItemId()) {
+            case R.id.allUsers:
+                fragment = new AllUserFragment();
+                break;
+
+            case R.id.chat:
+                fragment = new ChatsFragment();
+                break;
+
+            case R.id.request:
+                fragment = new FriendsFragment();
+                break;
+
+            case R.id.friends:
+                fragment = new FriendsFragment();
+                break;
+
+        }
+        return loadFragment(fragment);
     }
 }
