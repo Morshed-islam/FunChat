@@ -1,16 +1,11 @@
 package com.techmorshed.funchat.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,7 +30,6 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.techmorshed.funchat.R;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,7 +40,7 @@ import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
-public class SettingsActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity {
 
 
     private DatabaseReference mUserDatabase;
@@ -58,6 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleImageView mDisplayImage;
     private TextView mName;
     private TextView mStatus;
+    private FirebaseAuth mAuth;
+
 
     private Button mStatusBtn;
     private Button mImageBtn;
@@ -77,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mAuth = FirebaseAuth.getInstance();
 
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settings_name);
@@ -112,9 +109,9 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (!image.equals("default")) {
 
-                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
+                    //Picasso.with(MyProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
 
-                    Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                    Picasso.with(MyProfileActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
                             .placeholder(R.drawable.default_avatar).into(mDisplayImage, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -124,7 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onError() {
 
-                            Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
+                            Picasso.with(MyProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
 
                         }
                     });
@@ -148,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 String status_value = mStatus.getText().toString();
 
-                Intent status_intent = new Intent(SettingsActivity.this, StatusActivity.class);
+                Intent status_intent = new Intent(MyProfileActivity.this, StatusActivity.class);
                 status_intent.putExtra("status_value", status_value);
                 startActivity(status_intent);
 
@@ -163,10 +160,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 //                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 //
-//                    if(ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+//                    if(ContextCompat.checkSelfPermission(MyProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
 //
-//                        Toast.makeText(SettingsActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
-//                        ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+//                        Toast.makeText(MyProfileActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
+//                        ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 //                        return;
 //
 //                    } else {
@@ -187,7 +184,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 //                CropImage.activity()
 //                        .setGuidelines(CropImageView.Guidelines.ON)
-//                        .start(SettingsActivity.this);
+//                        .start(MyProfileActivity.this);
 
 
             }
@@ -221,7 +218,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .start(this);
 
 //            isChanged = true;
-            //Toast.makeText(SettingsActivity.this, imageUri, Toast.LENGTH_LONG).show();
+            //Toast.makeText(MyProfileActivity.this, imageUri, Toast.LENGTH_LONG).show();
 
         }
 
@@ -233,7 +230,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
 
-                mProgressDialog = new ProgressDialog(SettingsActivity.this);
+                mProgressDialog = new ProgressDialog(MyProfileActivity.this);
                 mProgressDialog.setTitle("Uploading Image...");
                 mProgressDialog.setMessage("Please wait while we upload and process the image.");
                 mProgressDialog.setCanceledOnTouchOutside(false);
@@ -290,7 +287,7 @@ public class SettingsActivity extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
 
                                                     mProgressDialog.dismiss();
-                                                    Toast.makeText(SettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(MyProfileActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
 
                                                 }
 
@@ -300,7 +297,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                                     } else {
 
-                                        Toast.makeText(SettingsActivity.this, "Error in uploading thumbnail.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MyProfileActivity.this, "Error in uploading thumbnail.", Toast.LENGTH_LONG).show();
                                         mProgressDialog.dismiss();
 
                                     }
@@ -312,7 +309,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                         } else {
 
-                            Toast.makeText(SettingsActivity.this, "Error in uploading.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MyProfileActivity.this, "Error in uploading.", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
 
                         }
@@ -330,6 +327,25 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+
+            mUserDatabase.child("online").setValue("true");
+
+        }
+
+    }
+
+
+
+
 
 
     //not used

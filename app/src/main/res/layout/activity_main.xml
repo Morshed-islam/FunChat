@@ -13,6 +13,7 @@
         layout="@layout/app_bar_layout" />
 
 
+
     <!--<android.support.design.widget.AppBarLayout-->
         <!--android:id="@+id/appBarLayout"-->
         <!--android:layout_width="match_parent"-->
@@ -20,12 +21,13 @@
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
+
     <FrameLayout
+        android:layout_marginTop="55dp"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="673dp"
+        android:layout_height="match_parent"
         android:text="Home"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_page_toolbar" />
 
     <android.support.design.widget.BottomNavigationView
@@ -35,9 +37,10 @@
         android:background="@color/colorPrimary"
         app:itemIconTint="#FFF"
         app:itemTextColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="30dp"
         app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>

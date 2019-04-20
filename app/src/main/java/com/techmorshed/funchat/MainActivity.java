@@ -12,16 +12,20 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.techmorshed.funchat.activity.AllUsersActivity;
-import com.techmorshed.funchat.activity.SettingsActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.techmorshed.funchat.activity.MyProfileActivity;
 import com.techmorshed.funchat.activity.StartActivity;
 import com.techmorshed.funchat.fragment.AllUserFragment;
 import com.techmorshed.funchat.fragment.ChatsFragment;
 import com.techmorshed.funchat.fragment.FriendsFragment;
+import com.techmorshed.funchat.fragment.RequestFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
+    private DatabaseReference mUserRef;
 
 //    private SectionPagerAdapter mSectionsPagerAdapter;
 //    private TabLayout mTabLayout;
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+
         //Toolbar Set
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
@@ -39,7 +45,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+
+
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("FunChatUsers").child(mAuth.getCurrentUser().getUid());
+
+        }
 
 
         //loading the default fragment
@@ -87,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         } else {
 
-//            mUserRef.child("online").setValue("true");
+            mUserRef.child("online").setValue("true");
 
         }
 
@@ -108,11 +119,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (item.getItemId() == R.id.main_logout_btn) {
 
             FirebaseAuth.getInstance().signOut();
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
             sendToStart();
         }
-        if (item.getItemId() == R.id.main_settings_btn) {
+        if (item.getItemId() == R.id.profile_btn) {
 
-            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
 
         }
 
@@ -143,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = new AllUserFragment();
                 break;
 
-            case R.id.chat:
-                fragment = new ChatsFragment();
+            case R.id.request:
+                fragment = new RequestFragment();
                 break;
 
-            case R.id.request:
-                fragment = new FriendsFragment();
+            case R.id.chat:
+                fragment = new ChatsFragment();
                 break;
 
             case R.id.friends:
@@ -157,5 +169,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         }
         return loadFragment(fragment);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+
+        }
+
     }
 }

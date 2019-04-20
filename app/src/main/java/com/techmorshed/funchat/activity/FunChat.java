@@ -33,32 +33,32 @@ public class FunChat extends Application {
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
 
-//        mAuth = FirebaseAuth.getInstance();
-//
-//        if(mAuth.getCurrentUser() != null) {
-//
-//            mUserDatabase = FirebaseDatabase.getInstance()
-//                    .getReference().child("FunChatUsers").child(mAuth.getCurrentUser().getUid());
-//
-//            mUserDatabase.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                    if (dataSnapshot != null) {
-//
-//                        mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
-//
-//                    }
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//
-//        }
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() != null) {
+
+            mUserDatabase = FirebaseDatabase.getInstance()
+                    .getReference().child("FunChatUsers").child(mAuth.getCurrentUser().getUid());
+
+            mUserDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot != null) {
+
+                        mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
 
 
     }

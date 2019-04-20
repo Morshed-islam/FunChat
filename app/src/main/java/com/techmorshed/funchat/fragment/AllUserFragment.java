@@ -9,18 +9,23 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.techmorshed.funchat.R;
 import com.techmorshed.funchat.activity.UsersProfileActivity;
@@ -40,7 +45,7 @@ public class AllUserFragment extends Fragment {
 
     private DatabaseReference mUsersDatabase;
 
-//    private LinearLayoutManager mLayoutManager;
+//    private GridLayoutManager mLayoutManager;
     private ProgressDialog mProgress;
 
     public AllUserFragment() {
@@ -65,7 +70,7 @@ public class AllUserFragment extends Fragment {
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("FunChatUsers");
 
-//        mLayoutManager = new LinearLayoutManager(getContext());
+//        mLayoutManager = new GridLayoutManager(getContext(),3);
 
         mUsersList = (RecyclerView) view.findViewById(R.id.users_list_fragment);
         mUsersList.setHasFixedSize(true);
@@ -76,7 +81,7 @@ public class AllUserFragment extends Fragment {
         mProgress.setCanceledOnTouchOutside(false);
         mProgress.show();
 
-        startTimer(10000);
+        //startTimer(10000);
 
 
 
@@ -104,11 +109,38 @@ public class AllUserFragment extends Fragment {
 
         ) {
             @Override
-            protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {
+            protected void populateViewHolder(final UsersViewHolder usersViewHolder, Users users, int position) {
 
                 usersViewHolder.setDisplayName(users.getName());
 //                usersViewHolder.setUserStatus(users.getStatus());
                 usersViewHolder.setUserImage(users.getThumb_image(), getActivity());
+                mUsersDatabase.keepSynced(true);
+
+                final String list_user_id = getRef(position).getKey();
+
+
+                mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild("online")) {
+
+                            String userOnline = dataSnapshot.child("online").getValue().toString();
+                            usersViewHolder.setUserOnline(userOnline);
+                            mProgress.dismiss();
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                mProgress.dismiss();
+
 
                 final String user_id = getRef(position).getKey();
 
@@ -168,13 +200,59 @@ public class AllUserFragment extends Fragment {
 //
 //        }
 
-        public void setUserImage(String thumb_image, Context ctx) {
+        public void setUserImage(final String thumb_image, final Context ctx) {
 
-            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.user_single_image);
+            final CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.user_single_image);
 
-            Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.default_avatar).into(userImageView);
+
+
+            if (!thumb_image.equals("default")) {
+
+                //Picasso.with(MyProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
+
+                Picasso.with(ctx).load(thumb_image).networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.default_avatar).into(userImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                        Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.default_avatar).into(userImageView);
+
+
+                    }
+                });
+
+            }
 
         }
+
+
+
+
+
+        public void setUserOnline(String online_status) {
+
+            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.user_single_online_icon);
+
+
+            if(online_status.equals("true")){
+
+                userOnlineView.setVisibility(View.VISIBLE);
+
+
+            } else {
+
+                userOnlineView.setVisibility(View.INVISIBLE);
+
+            }
+
+        }
+
+
 
 
     }

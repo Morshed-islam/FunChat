@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/friends"
-        android:icon="@drawable/friends"
+        android:icon="@drawable/friend_req"
         android:title="Friends" />
 
 
