@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 import com.techmorshed.funchat.R;
 import com.techmorshed.funchat.adapter.MessageAdapter;
 import com.techmorshed.funchat.model.Messages;
@@ -71,7 +72,6 @@ public class ChatActivity extends AppCompatActivity {
     // Storage Firebase
     private StorageReference mImageStorage;
 
-
     //New Solution
     private int itemPos = 0;
 
@@ -95,11 +95,9 @@ public class ChatActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser() != null) {
 
-
             mUserRef = FirebaseDatabase.getInstance().getReference().child("FunChatUsers").child(mAuth.getCurrentUser().getUid());
 
         }
-
 
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -149,6 +147,7 @@ public class ChatActivity extends AppCompatActivity {
                 String online = dataSnapshot.child("online").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
+                Picasso.with(getApplicationContext()).load(image).placeholder(R.drawable.default_avatar).into(mProfileImage);
 
                 if (online.equals("true")) {
 
@@ -204,8 +203,6 @@ public class ChatActivity extends AppCompatActivity {
 
                         }
                     });
-
-
 
 
 
