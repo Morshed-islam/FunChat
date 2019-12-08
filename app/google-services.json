@@ -385,6 +385,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "14162712922-jq15olree4u2tcumgt6khageben3lpt7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techmorshed.funchat",
+            "certificate_hash": "5585df354db8d5648a05f9037db4966840ac756c"
+          }
+        },
+        {
           "client_id": "14162712922-0td1l57dgd9372ekcbfaoc8afrtb9p9v.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.adfendo.sdk.ads.AdFendo;
+import com.adfendo.sdk.ads.AdFendoInterstitialAd;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
     private DatabaseReference mUserRef;
+    private AdFendoInterstitialAd mAdFendoInterstitialAd;
 
 //    private SectionPagerAdapter mSectionsPagerAdapter;
 //    private TabLayout mTabLayout;
@@ -37,7 +41,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseApp.initializeApp(getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
+
+
+        // Interstitial sample ad unit id: "test-ad-unit-id-146514415~9142051414"
+        AdFendo.initialize("pub-app-617759263");
+        mAdFendoInterstitialAd = new AdFendoInterstitialAd(this, "ad-unit-617759263~467776422");
+        mAdFendoInterstitialAd.requestAd();
 
         //Toolbar Set
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
@@ -126,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (item.getItemId() == R.id.profile_btn) {
 
             startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+            loadAds();
 
         }
 
@@ -192,5 +204,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onRestart();
 
         Log.i("Online","Main : ReStart");
+    }
+
+    private void loadAds(){
+
+        if (mAdFendoInterstitialAd.isLoaded()){
+            mAdFendoInterstitialAd.showAd();
+        }else {
+            mAdFendoInterstitialAd.requestAd();
+        }
     }
 }

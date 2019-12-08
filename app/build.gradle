@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.techmorshed.funchat"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -30,17 +30,18 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation 'de.hdodenhof:circleimageview:2.1.0'
-    implementation 'com.google.firebase:firebase-database:10.2.0'
+    implementation 'com.google.firebase:firebase-database:16.1.0'
 //    implementation 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     api 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
-    implementation 'com.google.firebase:firebase-storage:10.2.0'
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
     implementation 'com.firebaseui:firebase-ui-database:1.2.0'
     implementation 'id.zelory:compressor:2.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     //noinspection GradleCompatible
-    implementation 'com.google.firebase:firebase-messaging:10.2.0'
-    implementation 'com.google.firebase:firebase-auth:10.2.0'
-    implementation 'com.google.firebase:firebase-core:10.2.0'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.1'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.github.adfendo:release:1.0.0.9'
 }
 apply plugin: 'com.google.gms.google-services'

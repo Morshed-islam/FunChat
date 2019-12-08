@@ -167,7 +167,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                             }
 
 
-                        }else{
+                        } else {
 
                             mProfileSendReqBtn.setVisibility(View.GONE);
                             mProgressDialog.dismiss();
@@ -213,15 +213,33 @@ public class UsersProfileActivity extends AppCompatActivity {
 
                             if (task.isSuccessful()) {
 
-                                mFriendReqDatabase.child(user_id).child(mCurrent_user.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                mFriendReqDatabase.child(user_id).child(mCurrent_user.getUid()).child("request_type").
+                                        setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
-//                                        Toast.makeText(UsersProfileActivity.this, " Request Sent!", Toast.LENGTH_SHORT).show();
+                                        HashMap<String, String> notificationData = new HashMap<>();
+                                        notificationData.put("from",mCurrent_user.getUid());
+                                        notificationData.put("type","request");
 
-                                        mProfileSendReqBtn.setEnabled(true);
-                                        mCurrent_state = "req_sent";
-                                        mProfileSendReqBtn.setText("Cancel Friend Request");
+                                        mNotificationDatabase.child(user_id).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                                //Friend Request Sent
+                                                mProfileSendReqBtn.setEnabled(true);
+                                                mCurrent_state = "req_sent";
+                                                mProfileSendReqBtn.setText("Cancel Friend Request");
+
+                                                mDeclineBtn.setVisibility(View.INVISIBLE);
+                                                mDeclineBtn.setEnabled(false);
+
+                                            }
+                                        });
+
+
+
+
 
 
                                     }
@@ -269,18 +287,14 @@ public class UsersProfileActivity extends AppCompatActivity {
                 }
 
 
-
-
-
-
                 // ------------ REQ RECEIVED STATE ----------
 
-                if(mCurrent_state.equals("req_received")){
+                if (mCurrent_state.equals("req_received")) {
 
                     final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
                     Map friendsMap = new HashMap();
                     friendsMap.put("FunChatFriends/" + mCurrent_user.getUid() + "/" + user_id + "/date", currentDate);
-                    friendsMap.put("FunChatFriends/" + user_id + "/"  + mCurrent_user.getUid() + "/date", currentDate);
+                    friendsMap.put("FunChatFriends/" + user_id + "/" + mCurrent_user.getUid() + "/date", currentDate);
 
 
                     friendsMap.put("FunChatFriend_req/" + mCurrent_user.getUid() + "/" + user_id, null);
@@ -292,7 +306,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
 
-                            if (databaseError == null){
+                            if (databaseError == null) {
 
                                 mProfileSendReqBtn.setEnabled(true);
                                 mCurrent_state = "friends";
@@ -301,7 +315,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                                 mDeclineBtn.setVisibility(View.INVISIBLE);
                                 mDeclineBtn.setEnabled(false);
 
-                            }else {
+                            } else {
 
                                 String error = databaseError.getMessage();
 
@@ -316,12 +330,9 @@ public class UsersProfileActivity extends AppCompatActivity {
                 }
 
 
-
-
-
                 // ------------ UNFRIENDS ---------
 
-                if(mCurrent_state.equals("friends")){
+                if (mCurrent_state.equals("friends")) {
 
                     Map unfriendMap = new HashMap();
                     unfriendMap.put("FunChatFriends/" + mCurrent_user.getUid() + "/" + user_id, null);
@@ -332,7 +343,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
 
-                            if(databaseError == null){
+                            if (databaseError == null) {
 
                                 mCurrent_state = "not_friends";
                                 mProfileSendReqBtn.setText("Send Friend Request");
@@ -355,15 +366,6 @@ public class UsersProfileActivity extends AppCompatActivity {
                     });
 
                 }
-
-
-
-
-
-
-
-
-
 
 
             }

@@ -107,6 +107,7 @@ public class AllUserFragment extends Fragment {
                 UsersViewHolder.class,
                 mUsersDatabase
 
+
         ) {
             @Override
             protected void populateViewHolder(final UsersViewHolder usersViewHolder, Users users, int position) {

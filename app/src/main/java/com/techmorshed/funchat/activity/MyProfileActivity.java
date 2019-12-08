@@ -265,14 +265,14 @@ public class MyProfileActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
 
-                            final String download_url = task.getResult().getDownloadUrl().toString();
+                            final String download_url = task.getResult().getStorage().getDownloadUrl().toString();
 
                             UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
                             uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
 
-                                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                                    String thumb_downloadUrl = thumb_task.getResult().getStorage().getDownloadUrl().toString();
 
                                     if (thumb_task.isSuccessful()) {
 
